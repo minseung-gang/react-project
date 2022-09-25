@@ -14,7 +14,6 @@ import {
 } from "firebase/database"
 import MessageForm from "./MessageForm"
 import MessageHeader from "./MessageHeader"
-import { render } from "@testing-library/react"
 
 const MainPanel = () => {
   const chatRoom = useSelector((state) => state.ChatRooms.currentChatRoom)
