@@ -9,11 +9,7 @@ import { authService, storage, realtimeDbService } from "../../../firebase"
 import { setPhotoURL } from "../../../redux/action/user_action"
 import { updateProfile } from "firebase/auth"
 import mime from "mime"
-import {
-  getStorage,
-  ref as strRef,
-  uploadBytesResumable,
-} from "firebase/storage"
+
 // react-icons
 
 const UserPanel = () => {
@@ -35,7 +31,7 @@ const UserPanel = () => {
     const file = event.target.files[0]
     /* const mime = require("mime")
     const metadata = { contentType: mime.getType(file.name) } */
-    const storage = getStorage()
+    /*  const storage = getStorage() */
 
     try {
       // 스토리지에 파일 저장하기

@@ -106,12 +106,14 @@ h3 {
 .message-box {
   width: 100%;
   height: calc(100vh - 200px);
-
   border-radius: 3px;
   padding: 1rem;
   box-sizing: border-box;
   margin-bottom: 1rem;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
 }
 
 .main-select-btn {
@@ -277,24 +279,60 @@ form textarea::-webkit-scrollbar {
 .currentUser_name_wrapper {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 10px 0;
+  align-items: flex-start;
+  gap: 0 10px;
 }
-.currentUser_name_field {
+.user_field {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0 15px;
+}
+.user_container__not .user_field {
+  align-items: flex-start;
+  gap: 8px 0;
+  flex-direction: column;
+}
+.user_chat_container {
+  display: flex;
+  gap: 0 15px;
+  align-items: flex-end;
+}
+.user-chatbox {
+  padding: 10px;
+  box-sizing: border-box;
+  background: #7a84eb;
+  border-radius: 5px;
+  color: #ebe4e4;
 }
 .currentUser_time {
   font-size: 0.7rem;
 }
-.currentUser__img {
-  width: 60px;
-  height: 60px;
+.user__img {
+  width: 40px;
+  height: 40px;
   border-radius: 35%;
   background-size: cover;
+}
+.user_field {
+  display: flex;
 }
 .currentUser_name {
   font-size: 1rem;
   font-weight: 600;
+}
+.user_container__mine > img {
+  order: 2;
+}
+.user_container__mine .currentUser_name_wrapper {
+  justify-content: flex-end;
+}
+.user_container__mine .currentUser_name {
+  order: 2;
+}
+.user_container__not .currentUser_time {
+  order: 2;
+}
+.user_conatainer_not .currentUser_name_wrapper {
 }
 /*********************** modal ***********************/

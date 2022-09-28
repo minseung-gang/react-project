@@ -19,7 +19,7 @@ const MainPanel = () => {
   const chatRoom = useSelector((state) => state.ChatRooms.currentChatRoom)
   const user = useSelector((state) => state.user.currentUser)
   const [messages, setMessages] = useState([])
-
+  const [render, setRender] = useState(false)
   const [messageLoading, setMessageLoading] = useState(true)
   const db = getDatabase()
 
@@ -30,24 +30,18 @@ const MainPanel = () => {
 
     onChildAdded(messagesRef, (snapshot) => {
       const childData = snapshot.val()
-
       messageArray.push(childData)
-      console.log("value Array", messageArray)
       setMessages(messageArray)
-
       setMessageLoading(false)
     })
-    console.log(messages)
   }
-
+  const renderPage = () => {
+    setRender(!render)
+  }
   const renderMessages = (messages) =>
-    messages.length >= 0 &&
+    messages.length > 0 &&
     messages.map((messages) => (
-      <Message
-        key={messages.timestamp}
-        message={messages}
-        user={messages.user}
-      />
+      <Message key={messages.timestamp} message={messages} user={user} />
     ))
 
   useEffect(() => {
@@ -60,7 +54,7 @@ const MainPanel = () => {
     <div className="mainPanel-inner">
       <MessageHeader />
       <div className="message-box">{renderMessages(messages)}</div>
-      <MessageForm />
+      <MessageForm render={renderPage} />
     </div>
   )
 }

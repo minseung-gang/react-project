@@ -4,14 +4,14 @@ import { HiArrowCircleRight } from "react-icons/hi"
 import { FaUpload } from "react-icons/fa"
 import { useSelector } from "react-redux"
 import { getDatabase, ref as ref_database, set, push } from "firebase/database"
-import {
-  ref as ref_storage,
-  getDownloadURL,
-  uploadBytes,
-} from "firebase/storage"
+import { ref as ref_storage, getDownloadURL } from "firebase/storage"
 import { async } from "@firebase/util"
 import { authService, storage, realtimeDbService } from "../../../firebase"
 
+import "../../../asset/chat.css"
+
+import { setPhotoURL } from "../../../redux/action/user_action"
+import { updateProfile } from "firebase/auth"
 const MessageForm = (props) => {
   const [completed, setCompleted] = useState(0)
   const [keyPress, setKeyPress] = useState(false)
@@ -34,7 +34,6 @@ const MessageForm = (props) => {
     try {
       // 스토리지에 파일 저장하기
       const storageRef = ref_storage(storage, `message/ddd.jpg`)
-      const uploadTask = await uploadBytes(storageRef, file)
       alert()
     } catch (err) {
       console.log(err)
@@ -125,7 +124,6 @@ const MessageForm = (props) => {
       <input
         type="file"
         onChange={handleUploadImg}
-        accept="image/jpeg, image/png"
         ref={inputOpenImageRef}
         style={{ display: "none" }}
       />

@@ -19,7 +19,7 @@ function App() {
       if (user) {
         //로그인이 되었을 때
         navigate("/")
-        console.log("user: ", user)
+
         dispatch(setUser(user))
       } else {
         //로그인이 되지 않았을 때
