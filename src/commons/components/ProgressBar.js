@@ -13,7 +13,7 @@ const ProgressBar = (props) => {
     height: "100%",
     width: `${completed}%`,
     backgroundColor: bgcolor,
-    transition: "width 1s ease-in-out",
+    transition: "width 0.3s ease-in-out",
     borderRadius: "inherit",
     textAlign: "right",
   }
@@ -22,6 +22,7 @@ const ProgressBar = (props) => {
     padding: 5,
     color: "white",
     fontWeight: "bold",
+    fontSize: "12px",
   }
 
   return (

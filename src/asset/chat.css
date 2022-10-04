@@ -11,6 +11,7 @@ p {
 }
 .panel-container {
   padding: 1rem;
+  align-items: flex-end;
 }
 .mainPanel-wrapper {
   width: 100%;
@@ -105,7 +106,7 @@ h3 {
 }
 .message-box {
   width: 100%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 180px);
   border-radius: 3px;
   padding: 1rem;
   box-sizing: border-box;
