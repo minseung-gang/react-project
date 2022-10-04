@@ -25,7 +25,7 @@ const Message = ({ message, user }) => {
                 <img
                   style={{ maxWidth: "300px" }}
                   alt="이미지"
-                  src={message.user.image}
+                  src={message.image}
                 />
               ) : (
                 <p className="user-chatbox">{message.content}</p>
