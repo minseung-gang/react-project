@@ -7,7 +7,7 @@ import { getDatabase, ref as ref_database, set, push } from "firebase/database"
 import {
   ref as ref_storage,
   getDownloadURL,
-  uploadBytes,
+  uploadBytesResumable,
 } from "firebase/storage"
 import { async } from "@firebase/util"
 import { authService, storage, realtimeDbService } from "../../../firebase"
@@ -18,7 +18,7 @@ const MessageForm = (props) => {
   const [content, setContent] = useState("")
   const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(false)
-
+  const { render } = props
   const countInterval = useRef(null)
   const chatRoom = useSelector((state) => state.ChatRooms.currentChatRoom)
   const user = useSelector((state) => state.user.currentUser)
@@ -30,12 +30,57 @@ const MessageForm = (props) => {
 
   const handleUploadImg = async (event) => {
     const file = event.target.files[0]
-
+    if (file == null) return
     try {
       // 스토리지에 파일 저장하기
-      const storageRef = ref_storage(storage, `message/ddd.jpg`)
-      const uploadTask = await uploadBytes(storageRef, file)
-      alert()
+      const metadata = {
+        contentType: "image/jpeg",
+      }
+      const storageRef = ref_storage(storage, `message/publick/${file.name}`)
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata)
+      setLoading(true)
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+          setCompleted(Math.floor(progress))
+
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused")
+              break
+            case "running":
+              console.log("Upload is running")
+              break
+          }
+        },
+        (error) => {
+          switch (error.code) {
+            case "storage/unauthorized":
+              break
+            case "storage/canceled":
+              break
+
+            // ...
+
+            case "storage/unknown":
+              break
+          }
+          setLoading(false)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            console.log("File available at", downloadURL)
+            const db = getDatabase()
+            const messageRef = ref_database(db, "messages/" + chatRoom.id)
+            await set(push(messageRef), createMessage(downloadURL))
+            setLoading(false)
+            render()
+          })
+        }
+      )
     } catch (err) {
       console.log(err)
     }
@@ -52,8 +97,9 @@ const MessageForm = (props) => {
 
   useEffect(() => {
     if (completed >= 100) {
-      setCompleted(0)
-      clearInterval(countInterval)
+      setTimeout(() => {
+        setCompleted(0)
+      }, 2000)
     }
   }, [completed])
 
@@ -76,7 +122,6 @@ const MessageForm = (props) => {
   }
 
   const handleSubmit = async (e) => {
-    const { render } = props
     if (!content) {
       setErrors((prev) => prev.concat("내용을 입력해주세요."))
       return
@@ -109,13 +154,20 @@ const MessageForm = (props) => {
           <textarea value={content} onChange={handleChange}></textarea>
 
           {keyPress && (
-            <div className="submit-btn" onClick={handleSubmit}>
+            <div
+              className="submit-btn"
+              onClick={handleSubmit}
+              disabled={loading ? true : false}
+            >
               <HiArrowCircleRight />
             </div>
           )}
           {}
         </div>
-        <ProgressBar bgcolor={"#e66363"} completed={completed} />
+        {!(completed === 0 || completed === 100) && (
+          <ProgressBar bgcolor={"#7a84eb"} completed={completed} />
+        )}
+
         <div>
           {errors.map((Message) => (
             <p key={Message}>{Message}</p>
