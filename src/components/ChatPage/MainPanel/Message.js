@@ -1,5 +1,5 @@
 import moment from "moment"
-import Reactg from "react"
+import React from "react"
 
 const Message = ({ message, user }) => {
   console.log(user, message)
