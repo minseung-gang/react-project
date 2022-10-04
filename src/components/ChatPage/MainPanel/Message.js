@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { useState } from "react"
+import Reactg from "react"
 
 const Message = ({ message, user }) => {
   console.log(user, message)
