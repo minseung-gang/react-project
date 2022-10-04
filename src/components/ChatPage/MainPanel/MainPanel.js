@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { useSelector } from "react-redux"
 import Message from "./Message"
 
@@ -21,8 +21,36 @@ const MainPanel = () => {
   const [messages, setMessages] = useState([])
   const [render, setRender] = useState(false)
   const [messageLoading, setMessageLoading] = useState(true)
+
+  const [searchTerm, setSearchTerm] = useState("")
+  const [searchResult, setSearchResult] = useState([])
+  const [searchLoading, setSearchLoading] = useState(false)
+
   const db = getDatabase()
 
+  const handleSearchMessages = () => {
+    const chatRoomsArray = [...messages]
+    const regex = new RegExp(searchTerm, "gi") // 정규표현식 https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_Expressions 참고
+    const resultMessages = chatRoomsArray.reduce((acc, message) => {
+      if (
+        (message.content && message.content.match(regex)) ||
+        message.user.name.match(regex)
+      ) {
+        acc.push(message)
+      }
+      return acc
+    }, [])``
+    setSearchResult(resultMessages)
+    setTimeout(() => {
+      setMessageLoading(false)
+    }, 1000)
+  }
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value)
+    console.log(searchTerm)
+    setSearchLoading(true)
+    handleSearchMessages()
+  }
   const addMessageListener = (chatRoomId) => {
     let messageArray = []
     setMessages([])
@@ -52,8 +80,10 @@ const MainPanel = () => {
   }, [])
   return (
     <div className="mainPanel-inner">
-      <MessageHeader />
-      <div className="message-box">{renderMessages(messages)}</div>
+      <MessageHeader handleSearch={handleSearch} />
+      <div className="message-box">
+        {searchTerm ? renderMessages(searchResult) : renderMessages(messages)}
+      </div>
       <MessageForm render={renderPage} />
     </div>
   )
