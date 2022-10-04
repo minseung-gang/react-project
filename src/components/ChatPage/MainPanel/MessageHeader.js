@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Modal } from "react-bootstrap"
 import { AiOutlineSearch } from "react-icons/ai"
 import { FaUserFriends } from "react-icons/fa"
 import { MdDescription } from "react-icons/md"
-const MessageHeader = () => {
+const MessageHeader = ({ handleSearch }) => {
   const [discriptionDropdown, setDiscriptionDropdown] = useState(false)
   const [postDropdown, setPostDropdown] = useState(false)
   const handleDiscription = () => {
@@ -78,7 +78,7 @@ const MessageHeader = () => {
           )}
         </div>
         <div className="search-cotainer flex">
-          <input type="text" placeholder="검색하기" />
+          <input type="text" placeholder="검색하기" onChange={handleSearch} />
           <AiOutlineSearch style={{ color: "#5b5e5b", cursor: "pointer" }} />
         </div>
       </div>
